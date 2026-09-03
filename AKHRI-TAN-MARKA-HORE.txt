@@ -1,0 +1,98 @@
+BAKHAARKAYGA — APP MAAMULKA BAKHAARKA
+========================================
+
+WAX MUHIIM AH OO RUN AH (fadlan akhri):
+
+1) APK (Android install file dhab ah) - MA SAMEYN KARO
+   Halkan (Claude) uma haysto tools-ka dhisidda APK-yada Android (Android
+   Studio, Gradle, iyo internet si loo soo dejiyo maktabadaha). Sidaas
+   darteed APK ma kuu samayn karo — waan run ahaan kuu sheegayaa taas
+   halkii aan wax been ah kuu sheegi lahaa.
+
+2) LAAKIIN — Waxaan kuu sameeyay PWA DHAB AH (Progressive Web App)
+   Faylashan waa app dhammeystiran oo:
+   - Home Screen-ka Samsung-kaaga lagu rakibi karo (icon dhab ah, aan
+     address bar lahayn — u eg app caadi ah)
+   - 100% OFFLINE ka dib markii la rakibo
+   - Xogta ku kaydisa telefoonka
+   - Loor/Haaf, xisaab-xir bil kasta, iwm — dhammaan sida aad codsatay
+
+   FARQIGA MUHIIMKA AH: si "Install app" oo dhab ah ay Chrome/Samsung
+   Internet ugu soo bandhigto (icon aan address bar lahayn), app-ku waa
+   inuu ka yimaadaa HTTPS website — ma noqon karto file kaliya oo
+   telefoonka lagu furay (file://). Tani ma aha xaddidaad Claude leh —
+   waa sharciga amniga ee dhammaan browser-adu ku shaqeeyaan.
+
+   Wanaagga ah: hosting-kan waa BILAASH oo aad awoodid inaad samayso
+   10 daqiiqo gudahood, adigoo aan koodh qorin.
+
+========================================
+TALLAABADA 1: HOSTING (10 daqiiqo, hal mar keliya)
+========================================
+
+Xulashada ugu fudud waa GitHub Pages (bilaash, joogto ah):
+
+1. Booqo github.com, samee account bilaash ah (haddii aanad lahayn).
+2. Riix "+" kore-midig → "New repository".
+   - Magaca: bakhaarkayga
+   - Dooro "Public"
+   - Riix "Create repository"
+3. Bogga repo-ga cusub, riix "uploading an existing file" (ama
+   "Add file" → "Upload files").
+4. Ka jiid (drag & drop) DHAMMAAN faylasha folder-kan:
+   - index.html
+   - manifest.json
+   - service-worker.js
+   - folder-ka "icons" (oo leh 3 sawir)
+   Hubi in aad la wadaagto qaab-dhismeedka folder-ka (icons ha noqoto
+   subfolder, ha isku daadin sawirrada bogga sare).
+5. Riix "Commit changes".
+6. Gal "Settings" (tab-ka repo-ga) → "Pages" (bidix).
+7. Hoosta "Branch", dooro "main" iyo "/ (root)" → "Save".
+8. Sug 1-2 daqiiqo. Bogga Pages wuxuu ku siin doonaa link sida:
+   https://MAGACAAGA.github.io/bakhaarkayga/
+
+Taasi waa link-ga joogtada ah ee app-kaaga — HTTPS, bilaash, weligiis.
+
+========================================
+TALLAABADA 2: KU RAKIB TELEFOONKA SAMSUNG
+========================================
+
+1. Telefoonka fur Chrome (ama Samsung Internet).
+2. Tag link-ga aad heshay (https://MAGACAAGA.github.io/bakhaarkayga/).
+3. Sug ilaa bogga si buuxda u shubmo.
+4. Riix menu-ga saddexda dhibcood (⋮) kore-midig.
+5. Dooro "Install app" (ama "Add to Home screen").
+6. Xaqiiji.
+7. Hadda Home Screen-kaaga waxaad ku arki doontaa:
+   📦 Bakhaarkayga
+   Marka aad taabato, wuxuu u furmayaa sida app caadi ah — MA jiraan
+   address bar, MA baahna internet ka dib.
+
+Haddii aad rabto, waxaad kaloo ka riixi kartaa app-ka gudihiisa:
+"Dejinta" → "📲 Ku rakib Hadda" (button-kan wuxuu isu geeyaa isla
+dhaqanka install-ka ee browser-ku bixiyo).
+
+========================================
+XULASHO KALE (haddii aadan rabin GitHub)
+========================================
+
+Hab kasta oo kale oo aad file-yadan ku dhigto server HTTPS ah wuu shaqayn
+doonaa isku si (tusaale: Netlify, Vercel, ama server-ka shirkaddaada
+haddii aad leedahay). Waxa ugu muhiimsan waa in dhammaan 4-da fayl
+(index.html, manifest.json, service-worker.js, iyo folder-ka icons) ay
+isku meel ku jiraan (same folder), oo lagu furo https://.
+
+========================================
+DAMAANAD-QAAD: XOGTA
+========================================
+
+Xogtaadu (alaabta, iibabka) waxay ku kaydsan tahay TELEFOONKA KEEDIYA —
+ma aha server-ka GitHub. GitHub kaliya wuxuu haystaa koodhka app-ka
+(bannaan, aan xog lahayn). Marka aad furto app-ka, xogtu waxay ku
+jirtaa browser-ka telefoonkaaga (offline storage), sidaas darteed:
+
+- Ha isticmaalin app-ka telefoon kale oo aadan la wadaagin backup-ka.
+- Isticmaal "Dejinta → Soo Deji Xogta" si joogto ah si aad u kaydsato
+  backup, gaar ahaan ka hor inta aadan telefoonka bedelin ama app-ka
+  browser-ka ka tirtirin.

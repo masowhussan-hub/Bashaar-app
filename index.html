@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="so">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#6B4420">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Bakhaarkayga">
+<title>Bakhaarkayga</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<style>
+  :root{
+    --bg:#F5F6EF;
+    --surface:#FFFFFF;
+    --ink:#241F1A;
+    --ink-soft:#6B655B;
+    --primary:#8B5A2B;
+    --primary-dark:#6B4420;
+    --accent:#3F6B4F;
+    --accent-soft:#E6EEE5;
+    --danger:#A33B2E;
+    --danger-soft:#F5E4E1;
+    --border:#E4DFD1;
+    --gold:#C9922E;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans",Arial,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    -webkit-tap-highlight-color:transparent;
+    overscroll-behavior-y:contain;
+  }
+  #app{max-width:560px;margin:0 auto;min-height:100vh;background:var(--bg);display:flex;flex-direction:column;}
+
+  /* Top bar */
+  .topbar{
+    background:var(--primary-dark);
+    color:#fff;
+    padding:16px 16px 14px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    position:sticky;top:0;z-index:10;
+  }
+  .topbar .back{
+    background:rgba(255,255,255,.14);
+    border:none;color:#fff;font-size:20px;
+    width:38px;height:38px;border-radius:10px;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+  }
+  .topbar h1{font-size:19px;margin:0;font-weight:700;flex:1;letter-spacing:.2px;}
+  .topbar .sub{font-size:12.5px;opacity:.85;margin-top:2px;}
+
+  .content{flex:1;padding:16px;padding-bottom:36px;}
+
+  /* Home grid */
+  .home-hero{
+    background:linear-gradient(135deg,var(--primary-dark),var(--primary));
+    color:#fff;border-radius:18px;padding:22px 18px;margin-bottom:18px;
+  }
+  .home-hero .big{font-size:30px;font-weight:800;line-height:1.1;}
+  .home-hero .small{font-size:13.5px;opacity:.88;margin-top:6px;}
+
+  .home-grid{display:flex;flex-direction:column;gap:12px;}
+  .home-btn{
+    display:flex;align-items:center;gap:14px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:18px 16px;
+    text-align:right;
+    cursor:pointer;
+    width:100%;
+    font-family:inherit;
+  }
+  .home-btn .icon{
+    font-size:26px;width:50px;height:50px;border-radius:12px;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--accent-soft);flex-shrink:0;
+  }
+  .home-btn .label{font-size:17px;font-weight:700;color:var(--ink);}
+  .home-btn .desc{font-size:12.5px;color:var(--ink-soft);margin-top:2px;}
+  .home-btn .txt{flex:1;text-align:left;}
+
+  /* Cards & lists */
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;}
+  .row{display:flex;justify-content:space-between;align-items:center;gap:10px;}
+  .muted{color:var(--ink-soft);font-size:13px;}
+
+  .field{margin-bottom:14px;}
+  .field label{display:block;font-size:13.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;}
+  input[type=text],input[type=number],input[type=date],select,textarea{
+    width:100%;padding:12px 12px;border-radius:12px;border:1.5px solid var(--border);
+    font-size:16px;background:#fff;color:var(--ink);font-family:inherit;
+  }
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary);}
+
+  .unit-toggle{display:flex;gap:8px;}
+  .unit-toggle button{
+    flex:1;padding:12px;border-radius:12px;border:1.5px solid var(--border);
+    background:#fff;font-size:15px;font-weight:700;color:var(--ink-soft);font-family:inherit;
+  }
+  .unit-toggle button.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+
+  .btn{
+    display:block;width:100%;padding:14px;border-radius:13px;border:none;
+    font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;text-align:center;
+  }
+  .btn-primary{background:var(--primary);color:#fff;}
+  .btn-accent{background:var(--accent);color:#fff;}
+  .btn-outline{background:#fff;color:var(--ink);border:1.5px solid var(--border);}
+  .btn-danger{background:var(--danger-soft);color:var(--danger);}
+  .btn-row{display:flex;gap:10px;}
+  .btn-row .btn{flex:1;}
+  .btn-sm{padding:9px 12px;font-size:13.5px;border-radius:10px;}
+
+  .list-item{
+    background:var(--surface);border:1px solid var(--border);border-radius:14px;
+    padding:13px 14px;margin-bottom:9px;
+  }
+  .list-item .top{display:flex;justify-content:space-between;align-items:baseline;}
+  .list-item .name{font-size:16px;font-weight:700;}
+  .list-item .amount{font-size:16px;font-weight:800;color:var(--accent);}
+  .list-item .meta{font-size:13px;color:var(--ink-soft);margin-top:3px;}
+  .list-item .actions{display:flex;gap:8px;margin-top:10px;}
+  .list-item .actions button{flex:1;}
+
+  .fab-add{
+    position:sticky;bottom:12px;margin-top:6px;
+  }
+
+  .search-box{margin-bottom:12px;}
+
+  .tabs{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px;}
+  .tabs button{
+    white-space:nowrap;padding:9px 14px;border-radius:999px;border:1.5px solid var(--border);
+    background:#fff;font-size:13.5px;font-weight:700;color:var(--ink-soft);font-family:inherit;
+  }
+  .tabs button.active{background:var(--primary-dark);border-color:var(--primary-dark);color:#fff;}
+
+  .summary-card{
+    background:linear-gradient(135deg,var(--accent),#2E5540);
+    color:#fff;border-radius:16px;padding:18px;margin-bottom:16px;
+  }
+  .summary-card .row .v{font-size:15px;font-weight:800;}
+  .summary-card .row{padding:5px 0;font-size:13.5px;}
+  .summary-card hr{border:none;border-top:1px solid rgba(255,255,255,.25);margin:8px 0;}
+
+  .product-block{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;}
+  .product-block .pname{font-size:16px;font-weight:800;margin-bottom:6px;}
+  .product-block .stat{display:flex;justify-content:space-between;font-size:13.5px;padding:3px 0;color:var(--ink-soft);}
+  .product-block .stat b{color:var(--ink);font-weight:700;}
+
+  .empty{text-align:center;padding:40px 14px;color:var(--ink-soft);}
+  .empty .big-emoji{font-size:38px;margin-bottom:10px;}
+
+  .banner{background:var(--danger-soft);color:var(--danger);padding:10px 12px;border-radius:12px;font-size:13px;margin-bottom:12px;}
+  .install-tip{background:var(--accent-soft);color:var(--accent);padding:10px 12px;border-radius:12px;font-size:12.5px;margin-bottom:12px;}
+
+  .modal-overlay{
+    position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center;z-index:50;
+  }
+  .modal{background:#fff;border-radius:18px 18px 0 0;padding:20px 18px 26px;width:100%;max-width:560px;}
+  .modal h3{margin:0 0 14px;font-size:17px;}
+
+  ::selection{background:var(--gold);color:#fff;}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+/* ---------- STORAGE ---------- */
+const STORAGE_KEY = 'bakhaar_data_v1';
+let storageOK = true;
+let mem = null; // in-memory fallback
+
+function defaultData(){
+  const names = ["Bariis","Baasto-Baliina","Sokor","Bur","Caano","Makarooni","Saliid-Karoon","Saliid-Jirgaan","Baasto-Faranteelo","Caano-Kartoon"];
+  return {
+    products: names.map(n => ({id: uid(), name: n})),
+    sales: []
+  };
+}
+
+function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
+
+function loadData(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){ return JSON.parse(raw); }
+    const d = defaultData();
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(d));
+    return d;
+  }catch(e){
+    storageOK = false;
+    if(!mem) mem = defaultData();
+    return mem;
+  }
+}
+
+function saveData(){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA));
+  }catch(e){
+    storageOK = false;
+  }
+}
+
+let DATA = loadData();
+
+/* ---------- UNIT LOGIC ---------- */
+// 1 loor = 2 haaf  ->  1 haaf = 0.5 loor
+function qtyToLoor(qty, unit){
+  return unit === 'loor' ? qty : qty * 0.5;
+}
+function formatQtyFromLoor(totalLoor){
+  const EPS = 1e-6;
+  let sign = totalLoor < 0 ? -1 : 1;
+  let t = Math.abs(totalLoor);
+  let loorPart = Math.floor(t + EPS);
+  let remainder = t - loorPart;
+  let haafPart = Math.round(remainder / 0.5);
+  if(haafPart >= 2){ loorPart += 1; haafPart -= 2; }
+  let parts = [];
+  if(loorPart > 0) parts.push(loorPart + " Loor");
+  if(haafPart > 0) parts.push(haafPart + " Haaf");
+  if(parts.length === 0) parts.push("0 Loor");
+  return (sign<0?"-":"") + parts.join(" + ");
+}
+function money(n){
+  const v = Math.round((n + Number.EPSILON) * 100) / 100;
+  return "$" + v.toLocaleString('en-US', {minimumFractionDigits: v % 1 === 0 ? 0 : 2, maximumFractionDigits: 2});
+}
+function todayISO(){
+  const d = new Date();
+  return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,'0') + "-" + String(d.getDate()).padStart(2,'0');
+}
+function fmtDate(iso){
+  const d = new Date(iso + "T00:00:00");
+  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  return d.getDate() + " " + months[d.getMonth()] + " " + d.getFullYear();
+}
+
+/* ---------- ROUTER STATE ---------- */
+let route = 'home';
+let routeParam = null;
+let historyFilter = 'today';
+let productSearch = '';
+let editingSaleId = null;
+let reportMonth = null; // 'YYYY-MM'
+
+const app = document.getElementById('app');
+
+function nav(r, param){ route = r; routeParam = param || null; render(); window.scrollTo(0,0); }
+
+/* ---------- RENDER ROOT ---------- */
+function render(){
+  let html = '';
+  if(route === 'home') html = viewHome();
+  else if(route === 'products') html = viewProducts();
+  else if(route === 'sale-form') html = viewSaleForm();
+  else if(route === 'sales') html = viewSales('iibka');
+  else if(route === 'history') html = viewSales('taariikh');
+  else if(route === 'report') html = viewReport();
+  else if(route === 'settings') html = viewSettings();
+
+  app.innerHTML = html;
+  attachHandlers();
+}
+
+/* ---------- HOME ---------- */
+function viewHome(){
+  const salesCount = DATA.sales.length;
+  const thisMonthKey = todayISO().slice(0,7);
+  const monthTotal = DATA.sales.filter(s => s.date.slice(0,7) === thisMonthKey)
+    .reduce((sum,s)=>sum+s.amount,0);
+
+  let banner = '';
+  if(!storageOK){
+    banner = `<div class="banner">⚠️ Kaydinta si joogto ah uma shaqeynayn browser-kan. Fadlan file-ka ku fur Chrome, ama u dir "Add to Home Screen".</div>`;
+  }
+
+  return `
+    <div class="topbar"><h1>📦 Bakhaarkayga</h1></div>
+    <div class="content">
+      ${banner}
+      <div class="home-hero">
+        <div class="small">Lacagta bishan la iibiyey</div>
+        <div class="big">${money(monthTotal)}</div>
+        <div class="small">${salesCount} diiwaan oo iib ah oo dhan</div>
+      </div>
+      <div class="home-grid">
+        <button class="home-btn" data-nav="products">
+          <div class="icon">📦</div>
+          <div class="txt"><div class="label">Alaabta</div><div class="desc">Maamul liiska alaabta bakhaarka</div></div>
+        </button>
+        <button class="home-btn" data-nav="sale-form">
+          <div class="icon">🛒</div>
+          <div class="txt"><div class="label">Iibka</div><div class="desc">Ku qor alaab la iibiyey</div></div>
+        </button>
+        <button class="home-btn" data-nav="report">
+          <div class="icon">📊</div>
+          <div class="txt"><div class="label">Xisaab-xirka Bisha</div><div class="desc">Warbixin dhammeystiran oo automatic ah</div></div>
+        </button>
+        <button class="home-btn" data-nav="history">
+          <div class="icon">📋</div>
+          <div class="txt"><div class="label">Taariikhda</div><div class="desc">Eeg dhammaan diiwaannadii hore</div></div>
+        </button>
+        <button class="home-btn" data-nav="settings">
+          <div class="icon">⚙️</div>
+          <div class="txt"><div class="label">Dejinta</div><div class="desc">Kaydi ama nadiifi xogta</div></div>
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+/* ---------- PRODUCTS ---------- */
+function viewProducts(){
+  const q = productSearch.trim().toLowerCase();
+  const list = DATA.products.filter(p => p.name.toLowerCase().includes(q));
+  return `
+    <div class="topbar">
+      <button class="back" data-nav="home">‹</button>
+      <h1>📦 Alaabta</h1>
+    </div>
+    <div class="content">
+      <div class="search-box">
+        <input type="text" id="productSearch" placeholder="Raadi shey..." value="${escapeHtml(productSearch)}">
+      </div>
+      ${list.length === 0 ? `<div class="empty"><div class="big-emoji">📦</div>Wax shey ah lama helin</div>` :
+        list.map(p => productRow(p)).join('')}
+      <div class="fab-add">
+        <button class="btn btn-primary" id="addProductBtn">+ Ku dar Shey Cusub</button>
+      </div>
+    </div>
+  `;
+}
+
+function productRow(p){
+  const totalLoor = DATA.sales.filter(s=>s.productId===p.id).reduce((sum,s)=>sum+qtyToLoor(s.qty,s.unit),0);
+  return `
+    <div class="list-item">
+      <div class="top">
+        <div class="name">${escapeHtml(p.name)}</div>
+      </div>
+      <div class="meta">Wadarta la iibiyey: ${formatQtyFromLoor(totalLoor)}</div>
+      <div class="actions">
+        <button class="btn btn-outline btn-sm" data-edit-product="${p.id}">✏️ Wax ka beddel</button>
+        <button class="btn btn-danger btn-sm" data-del-product="${p.id}">🗑 Tirtir</button>
+      </div>
+    </div>
+  `;
+}
+
+/* ---------- SALE FORM (add / edit) ---------- */
+function viewSaleForm(){
+  const editing = editingSaleId ? DATA.sales.find(s=>s.id===editingSaleId) : null;
+  const unit = editing ? editing.unit : 'loor';
+  return `
+    <div class="topbar">
+      <button class="back" data-nav="home">‹</button>
+      <h1>🛒 ${editing ? 'Wax ka beddel Iibka' : 'Ku qor Iib Cusub'}</h1>
+    </div>
+    <div class="content">
+      <div class="card">
+        <div class="field">
+          <label>Magaca sheyga</label>
+          <select id="saleProduct">
+            ${DATA.products.map(p => `<option value="${p.id}" ${editing && editing.productId===p.id ? 'selected':''}>${escapeHtml(p.name)}</option>`).join('')}
+          </select>
+        </div>
+        <div class="field">
+          <label>Tirada</label>
+          <input type="number" id="saleQty" inputmode="decimal" min="0" step="any" placeholder="Tusaale: 10" value="${editing ? editing.qty : ''}">
+        </div>
+        <div class="field">
+          <label>Unugga</label>
+          <div class="unit-toggle">
+            <button type="button" data-unit="loor" class="${unit==='loor'?'active':''}">Loor</button>
+            <button type="button" data-unit="haaf" class="${unit==='haaf'?'active':''}">Haaf</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Qiimaha lagu iibiyey ($)</label>
+          <input type="number" id="saleAmount" inputmode="decimal" min="0" step="any" placeholder="Tusaale: 150" value="${editing ? editing.amount : ''}">
+        </div>
+        <div class="field">
+          <label>Taariikhda</label>
+          <input type="date" id="saleDate" value="${editing ? editing.date : todayISO()}">
+        </div>
+        <input type="hidden" id="saleUnit" value="${unit}">
+        <button class="btn btn-accent" id="saveSaleBtn">${editing ? 'Kaydi Beddelka' : '✓ Kaydi Iibka'}</button>
+      </div>
+      <button class="btn btn-outline" data-nav="sales">📋 Eeg Iibabkii Dhawaan la Qoray</button>
+    </div>
+  `;
+}
+
+/* ---------- SALES LIST / HISTORY ---------- */
+function inRange(dateISO, filter){
+  const d = new Date(dateISO + "T00:00:00");
+  const now = new Date();
+  if(filter === 'today') return dateISO === todayISO();
+  if(filter === 'week'){
+    const start = new Date(now); start.setDate(now.getDate() - 6); start.setHours(0,0,0,0);
+    return d >= start;
+  }
+  if(filter === 'month') return dateISO.slice(0,7) === todayISO().slice(0,7);
+  return true; // all
+}
+
+function viewSales(mode){
+  const filter = mode === 'iibka' ? 'today' : historyFilter;
+  if(mode === 'taariikh'){
+    // keep the selected filter tab state
+  }
+  const filtered = DATA.sales
+    .filter(s => mode === 'iibka' ? true : inRange(s.date, historyFilter))
+    .sort((a,b)=> b.date.localeCompare(a.date) || b.id.localeCompare(a.id));
+
+  const shown = mode === 'iibka' ? filtered.slice(0,15) : filtered;
+  const total = shown.reduce((sum,s)=>sum+s.amount,0);
+
+  const tabs = mode === 'taariikh' ? `
+    <div class="tabs">
+      <button data-hist="today" class="${historyFilter==='today'?'active':''}">Maanta</button>
+      <button data-hist="week" class="${historyFilter==='week'?'active':''}">Toddobaadkan</button>
+      <button data-hist="month" class="${historyFilter==='month'?'active':''}">Bishan</button>
+      <button data-hist="all" class="${historyFilter==='all'?'active':''}">Dhammaan</button>
+    </div>
+  ` : '';
+
+  return `
+    <div class="topbar">
+      <button class="back" data-nav="home">‹</button>
+      <h1>${mode==='iibka' ? '🛒 Iibabkii Dhawaan' : '📋 Taariikhda'}</h1>
+    </div>
+    <div class="content">
+      ${tabs}
+      ${shown.length ? `<div class="card row"><span class="muted">Wadarta lacagta muuqata</span><b>${money(total)}</b></div>` : ''}
+      ${shown.length === 0 ? `<div class="empty"><div class="big-emoji">🧾</div>Wali iib lama qorin</div>` :
+        shown.map(s => saleRow(s)).join('')}
+      ${mode==='iibka' ? `<div class="fab-add"><button class="btn btn-primary" data-nav="sale-form">+ Ku dar Iib Cusub</button></div>` : ''}
+    </div>
+  `;
+}
+
+function saleRow(s){
+  const p = DATA.products.find(p=>p.id===s.productId);
+  const name = p ? p.name : (s.productName || "Shey la tirtiray");
+  return `
+    <div class="list-item">
+      <div class="top">
+        <div class="name">${escapeHtml(name)}</div>
+        <div class="amount">${money(s.amount)}</div>
+      </div>
+      <div class="meta">${s.qty} ${s.unit === 'loor' ? 'Loor' : 'Haaf'} · ${fmtDate(s.date)}</div>
+      <div class="actions">
+        <button class="btn btn-outline btn-sm" data-edit-sale="${s.id}">✏️ Wax ka beddel</button>
+        <button class="btn btn-danger btn-sm" data-del-sale="${s.id}">🗑 Tirtir</button>
+      </div>
+    </div>
+  `;
+}
+
+/* ---------- MONTHLY REPORT ---------- */
+function viewReport(){
+  if(!reportMonth) reportMonth = todayISO().slice(0,7);
+  const monthSales = DATA.sales.filter(s => s.date.slice(0,7) === reportMonth);
+
+  const byProduct = {};
+  DATA.products.forEach(p => { byProduct[p.id] = {name: p.name, totalLoor:0, totalMoney:0, count:0}; });
+  monthSales.forEach(s => {
+    if(!byProduct[s.productId]){
+      byProduct[s.productId] = {name: s.productName || 'Shey la tirtiray', totalLoor:0, totalMoney:0, count:0};
+    }
+    byProduct[s.productId].totalLoor += qtyToLoor(s.qty, s.unit);
+    byProduct[s.productId].totalMoney += s.amount;
+    byProduct[s.productId].count += 1;
+  });
+
+  const activeProducts = Object.values(byProduct).filter(p => p.count > 0)
+    .sort((a,b) => b.totalMoney - a.totalMoney);
+
+  const grandMoney = activeProducts.reduce((sum,p)=>sum+p.totalMoney,0);
+  const grandLoor = activeProducts.reduce((sum,p)=>sum+p.totalLoor,0);
+
+  const [y,m] = reportMonth.split('-');
+  const monthNames = ["Janaayo","Febraayo","Maarso","Abriil","Maajo","Juun","Luulyo","Ogosto","Sebtembar","Oktoobar","Nofembar","Disembar"];
+  const monthLabel = monthNames[parseInt(m,10)-1] + " " + y;
+
+  return `
+    <div class="topbar">
+      <button class="back" data-nav="home">‹</button>
+      <h1>📊 Xisaab-xirka Bisha</h1>
+    </div>
+    <div class="content">
+      <div class="card row">
+        <span class="muted">Bisha</span>
+        <input type="month" id="reportMonthPicker" value="${reportMonth}" style="width:auto;padding:6px 8px;">
+      </div>
+      <div class="summary-card">
+        <div style="font-size:13px;opacity:.85;margin-bottom:4px;">${monthLabel}</div>
+        <div class="row"><span>Alaabta bisha baxday</span><span class="v">${activeProducts.length} nooc</span></div>
+        <div class="row"><span>Wadarta tirada (dhammaan)</span><span class="v">${formatQtyFromLoor(grandLoor)}</span></div>
+        <hr>
+        <div class="row" style="font-size:16px;"><span>Wadarta Lacagta Guud</span><span class="v" style="font-size:19px;">${money(grandMoney)}</span></div>
+      </div>
+
+      ${activeProducts.length === 0 ? `<div class="empty"><div class="big-emoji">📊</div>Bishan wax iib ah lama qorin</div>` :
+        activeProducts.map(p => `
+          <div class="product-block">
+            <div class="pname">${escapeHtml(p.name)}</div>
+            <div class="stat"><span>Tirada la iibiyey</span><b>${formatQtyFromLoor(p.totalLoor)}</b></div>
+            <div class="stat"><span>Lacagta laga helay</span><b>${money(p.totalMoney)}</b></div>
+            <div class="stat"><span>Celceliska qiimaha (halkii Loor)</span><b>${p.totalLoor>0 ? money(p.totalMoney/p.totalLoor) : '—'}</b></div>
+            <div class="stat"><span>Tirada diiwaannada</span><b>${p.count}</b></div>
+          </div>
+        `).join('')}
+    </div>
+  `;
+}
+
+/* ---------- SETTINGS ---------- */
+function viewSettings(){
+  return `
+    <div class="topbar">
+      <button class="back" data-nav="home">‹</button>
+      <h1>⚙️ Dejinta</h1>
+    </div>
+    <div class="content">
+      ${!storageOK ? `<div class="banner">⚠️ Kaydinta joogtada ah uma shaqeyneyso. Booqo talooyinka hoose.</div>` : `<div class="install-tip">✅ Xogtu waxay ku kaydsan tahay telefoonkan, si buuxda offline ah.</div>`}
+
+      <div class="card">
+        <div style="font-weight:700;margin-bottom:10px;">Kaydka Baaskiyaha (Backup)</div>
+        <div class="muted" style="margin-bottom:12px;">Xogtaada ka soo saar file text ah si aad u kaydsato meel kale, ama ugu shubto telefoon kale.</div>
+        <div class="btn-row">
+          <button class="btn btn-outline" id="exportBtn">⬇️ Soo Deji Xogta</button>
+          <button class="btn btn-outline" id="importBtn">⬆️ Soo Geli Xogta</button>
+        </div>
+        <textarea id="importText" placeholder="Ku dhex dheji xogtii aad hore u kaydsatay halkan..." style="margin-top:10px;min-height:80px;display:none;"></textarea>
+        <button class="btn btn-accent" id="importConfirmBtn" style="display:none;margin-top:10px;">Soo Geli</button>
+      </div>
+
+      <div class="card">
+        <div style="font-weight:700;margin-bottom:10px;color:var(--danger);">Guud ahaan</div>
+        <div class="muted" style="margin-bottom:12px;">Tan waxay tirtiraysaa DHAMMAAN alaabta iyo iibabka. Lama soo celin karo.</div>
+        <button class="btn btn-danger" id="clearAllBtn">🗑 Nadiifi Xogta Oo Dhan</button>
+      </div>
+
+      <div class="card">
+        <div style="font-weight:700;margin-bottom:6px;">Ku rakib Home Screen-ka</div>
+        <div class="muted" style="margin-bottom:12px;">Chrome ama Samsung Internet menu (⋮) → "Install app" ama "Add to Home screen". Kadib app-ku wuxuu uga muuqan doonaa Home Screen-ka sida app dhab ah, aan address bar lahayn.</div>
+        <button class="btn btn-accent" id="installBtn">📲 Ku rakib Hadda</button>
+      </div>
+    </div>
+  `;
+}
+
+/* ---------- HELPERS ---------- */
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+/* ---------- MODALS ---------- */
+function showModal(title, bodyHtml){
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.id = 'modalOverlay';
+  overlay.innerHTML = `<div class="modal"><h3>${title}</h3>${bodyHtml}</div>`;
+  overlay.addEventListener('click', (e)=>{ if(e.target === overlay) closeModal(); });
+  document.body.appendChild(overlay);
+}
+function closeModal(){
+  const m = document.getElementById('modalOverlay');
+  if(m) m.remove();
+}
+
+function promptProductName(existing){
+  showModal(existing ? "Wax ka beddel Sheyga" : "Ku dar Shey Cusub", `
+    <div class="field">
+      <label>Magaca sheyga</label>
+      <input type="text" id="modalProductName" value="${existing ? escapeHtml(existing.name) : ''}" placeholder="Tusaale: Timir">
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-outline" id="modalCancel">Jooji</button>
+      <button class="btn btn-primary" id="modalSave">Kaydi</button>
+    </div>
+  `);
+  document.getElementById('modalCancel').onclick = closeModal;
+  document.getElementById('modalSave').onclick = () => {
+    const val = document.getElementById('modalProductName').value.trim();
+    if(!val){ return; }
+    if(existing){
+      existing.name = val;
+    }else{
+      DATA.products.push({id: uid(), name: val});
+    }
+    saveData();
+    closeModal();
+    render();
+  };
+  setTimeout(()=>{ const el = document.getElementById('modalProductName'); if(el) el.focus(); }, 50);
+}
+
+function confirmDelete(message, onYes){
+  showModal("Xaqiiji Tirtiridda", `
+    <div class="muted" style="margin-bottom:16px;">${message}</div>
+    <div class="btn-row">
+      <button class="btn btn-outline" id="modalCancel">Jooji</button>
+      <button class="btn btn-danger" id="modalYes">Haa, Tirtir</button>
+    </div>
+  `);
+  document.getElementById('modalCancel').onclick = closeModal;
+  document.getElementById('modalYes').onclick = () => { onYes(); closeModal(); };
+}
+
+/* ---------- EVENT WIRING ---------- */
+function attachHandlers(){
+  app.querySelectorAll('[data-nav]').forEach(el => {
+    el.addEventListener('click', () => {
+      const r = el.getAttribute('data-nav');
+      if(r === 'sale-form') editingSaleId = null;
+      nav(r);
+    });
+  });
+
+  // Products
+  const searchEl = document.getElementById('productSearch');
+  if(searchEl){
+    searchEl.addEventListener('input', (e) => { productSearch = e.target.value; render(); 
+      const el2 = document.getElementById('productSearch'); if(el2){ el2.focus(); el2.selectionStart = el2.selectionEnd = el2.value.length; }
+    });
+  }
+  const addProductBtn = document.getElementById('addProductBtn');
+  if(addProductBtn) addProductBtn.addEventListener('click', () => promptProductName(null));
+
+  app.querySelectorAll('[data-edit-product]').forEach(el => {
+    el.addEventListener('click', () => {
+      const p = DATA.products.find(p=>p.id === el.getAttribute('data-edit-product'));
+      promptProductName(p);
+    });
+  });
+  app.querySelectorAll('[data-del-product]').forEach(el => {
+    el.addEventListener('click', () => {
+      const id = el.getAttribute('data-del-product');
+      const p = DATA.products.find(p=>p.id===id);
+      const usedCount = DATA.sales.filter(s=>s.productId===id).length;
+      confirmDelete(`Ma hubtaa inaad tirtirto "${escapeHtml(p.name)}"? ${usedCount>0 ? `Waxaa jira ${usedCount} diiwaan oo iib ah oo shaygan la xiriira, waana la ilaawi doonaa magaca laakiin xisaabtu way sii socon doontaa.` : ''}`, () => {
+        DATA.products = DATA.products.filter(pp=>pp.id!==id);
+        saveData();
+        render();
+      });
+    });
+  });
+
+  // Sale form
+  const unitBtns = app.querySelectorAll('[data-unit]');
+  unitBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      unitBtns.forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('saleUnit').value = btn.getAttribute('data-unit');
+    });
+  });
+  const saveSaleBtn = document.getElementById('saveSaleBtn');
+  if(saveSaleBtn){
+    saveSaleBtn.addEventListener('click', () => {
+      const productId = document.getElementById('saleProduct').value;
+      const qty = parseFloat(document.getElementById('saleQty').value);
+      const amount = parseFloat(document.getElementById('saleAmount').value);
+      const unit = document.getElementById('saleUnit').value;
+      const date = document.getElementById('saleDate').value || todayISO();
+      if(!productId || isNaN(qty) || qty <= 0 || isNaN(amount) || amount < 0){
+        alert("Fadlan buuxi Tirada iyo Qiimaha si sax ah.");
+        return;
+      }
+      const product = DATA.products.find(p=>p.id===productId);
+      if(editingSaleId){
+        const s = DATA.sales.find(s=>s.id===editingSaleId);
+        Object.assign(s, {productId, productName: product.name, qty, unit, amount, date});
+      }else{
+        DATA.sales.push({id: uid(), productId, productName: product.name, qty, unit, amount, date});
+      }
+      saveData();
+      editingSaleId = null;
+      nav('sales');
+    });
+  }
+
+  // Sales / history list
+  app.querySelectorAll('[data-edit-sale]').forEach(el => {
+    el.addEventListener('click', () => {
+      editingSaleId = el.getAttribute('data-edit-sale');
+      nav('sale-form');
+    });
+  });
+  app.querySelectorAll('[data-del-sale]').forEach(el => {
+    el.addEventListener('click', () => {
+      const id = el.getAttribute('data-del-sale');
+      confirmDelete("Ma hubtaa inaad tirtirto diiwaankan iib?", () => {
+        DATA.sales = DATA.sales.filter(s=>s.id!==id);
+        saveData();
+        render();
+      });
+    });
+  });
+  app.querySelectorAll('[data-hist]').forEach(el => {
+    el.addEventListener('click', () => { historyFilter = el.getAttribute('data-hist'); render(); });
+  });
+
+  // Report
+  const monthPicker = document.getElementById('reportMonthPicker');
+  if(monthPicker){
+    monthPicker.addEventListener('change', (e) => { reportMonth = e.target.value; render(); });
+  }
+
+  // Settings
+  const exportBtn = document.getElementById('exportBtn');
+  if(exportBtn){
+    exportBtn.addEventListener('click', () => {
+      const json = JSON.stringify(DATA, null, 2);
+      const blob = new Blob([json], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'bakhaar-backup-' + todayISO() + '.json';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    });
+  }
+  const importBtn = document.getElementById('importBtn');
+  if(importBtn){
+    importBtn.addEventListener('click', () => {
+      const t = document.getElementById('importText');
+      const b = document.getElementById('importConfirmBtn');
+      t.style.display = 'block'; b.style.display = 'block';
+      t.focus();
+    });
+  }
+  const importConfirmBtn = document.getElementById('importConfirmBtn');
+  if(importConfirmBtn){
+    importConfirmBtn.addEventListener('click', () => {
+      try{
+        const parsed = JSON.parse(document.getElementById('importText').value);
+        if(!parsed.products || !parsed.sales) throw new Error('bad format');
+        DATA = parsed;
+        saveData();
+        alert("Xogta si guul leh ayaa loo soo geliyay.");
+        nav('home');
+      }catch(e){
+        alert("Xogtan lama fahmin. Fadlan hubi in aad ku dhejisay xog sax ah.");
+      }
+    });
+  }
+  const installBtn = document.getElementById('installBtn');
+  if(installBtn){
+    installBtn.addEventListener('click', async () => {
+      if(deferredInstallPrompt){
+        deferredInstallPrompt.prompt();
+        await deferredInstallPrompt.userChoice;
+        deferredInstallPrompt = null;
+      }else{
+        alert('Fur menu-ga browser-ka (⋮) oo dooro "Install app" ama "Add to Home screen".');
+      }
+    });
+  }
+  const clearAllBtn = document.getElementById('clearAllBtn');
+  if(clearAllBtn){
+    clearAllBtn.addEventListener('click', () => {
+      confirmDelete("Tani waxay si buuxda u tirtiri doontaa dhammaan alaabta iyo iibabka. Lama soo celin karo.", () => {
+        DATA = defaultData();
+        saveData();
+        nav('home');
+      });
+    });
+  }
+}
+
+render();
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js').catch(()=>{ /* offline-first: ignore if it can't register (e.g. opened as a local file) */ });
+  });
+}
+
+let deferredInstallPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+});
+</script>
+</body>
+</html>
